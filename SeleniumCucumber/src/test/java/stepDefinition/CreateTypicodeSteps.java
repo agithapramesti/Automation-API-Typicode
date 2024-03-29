@@ -31,6 +31,7 @@ public class CreateTypicodeSteps {
     @And("^prepare create request data with userId is \"([^\"]*)\"$")
     public void prepareCreateRequestDataWithUserIdIs(String userId) {
         typicodeController.setUserId(Integer.parseInt(userId));
+        typicodeController.setUserIdNull("not null");
     }
 
     @And("^send post to typicode endpoint")
@@ -73,5 +74,36 @@ public class CreateTypicodeSteps {
     public void createResponseWithIdIsNotNULL() {
         Integer idActual = typicodeController.getResponse().path("id");
         assertThat("response id is NULL", idActual, notNullValue());
+    }
+
+    @And("^prepare create request data with id is \"([^\"]*)\"$")
+    public void prepareCreateRequestDataWithIdIs(String id) {
+        typicodeController.setId(Integer.parseInt(id));
+    }
+
+    @And("create response with title is null")
+    public void createResponseWithTitleIsNull() {
+        String titleActual = typicodeController.getResponse().path("title");
+        assertThat("response with title is different with expected",
+                titleActual, equalTo(null));
+    }
+
+    @And("create response with body is null")
+    public void createResponseWithBodyIsNull() {
+        String bodyActual = typicodeController.getResponse().path("body");
+        assertThat("response with body is different with expected",
+                bodyActual, equalTo(null));
+    }
+
+    @And("^prepare create request data with userIdNull is \"([^\"]*)\"$")
+    public void prepareCreateRequestDataWithUserIdNullIs(String userIdNull) {
+        typicodeController.setUserIdNull(null);
+    }
+
+    @And("create response with userId is null")
+    public void createResponseWithUserIdIsNull() {
+        String userIdActual = typicodeController.getResponse().path("userId");
+        assertThat("response with userId is different with expected",
+                userIdActual, equalTo(null));
     }
 }

@@ -21,7 +21,9 @@ public class TypicodeController extends PageObject {
     private Response response;
     private String title;
     private String body;
+    private String userIdNull;
     private int userId;
+    private int id;
 
     public Response sendGetTypicode() {
         Response response = given().log().all()
@@ -44,10 +46,24 @@ public class TypicodeController extends PageObject {
         String requestBody = "{\"userId\":"+getUserId()+",\"title\":\""+getTitle()+"\"," +
                 "\"body\":\""+getBody()+"\"}";
 
+        if (getId() != 0) {
+            requestBody = "{\"userId\":"+getUserId()+",\"title\":\""+getTitle()+"\"," +
+                    "\"body\":\""+getBody()+"\",\"id\":"+getId()+"}";
+        }
+
+        if (getTitle() == null)
+            requestBody = "{\"userId\":"+getUserId()+",\"body\":\""+getBody()+"\"}";
+
+        if (getBody() == null)
+            requestBody = "{\"userId\":"+getUserId()+",\"title\":\""+getTitle()+"\"}";
+
+        if (getUserIdNull() == null)
+            requestBody = "{\"title\":\""+getTitle()+"\",\"body\":\""+getBody()+"\"}";
+
         Response response = given().log().all()
                 .header("content-type", "application/json")
                 .header("charset", "UTF-8")
-                .body(String.format(requestBody,getUserId(),getTitle(),getBody()))
+                .body(requestBody)
                 .when()
                 .post("https://jsonplaceholder.typicode.com/posts")
                 .then()
