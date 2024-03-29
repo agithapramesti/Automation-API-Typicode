@@ -9,10 +9,10 @@ import java.util.logging.Logger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-public class TypicodeSteps {
+public class GetTypicodeSteps {
 
     TypicodeController typicodeController;
-    Logger logger = Logger.getLogger(TypicodeSteps.class.getName());
+    Logger logger = Logger.getLogger(GetTypicodeSteps.class.getName());
 
     @Given("^prepare a GET to typicode endpoint$")
     public void prepareAGETToTypicodeEndpoint() {
