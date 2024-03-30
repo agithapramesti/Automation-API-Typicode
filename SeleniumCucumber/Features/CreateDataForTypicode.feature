@@ -53,7 +53,7 @@ Feature: Create Data for Typicode
     Then receive create response successfully with response code is "201"
     And create response with body should be ""
 
-  Scenario: Verify create typicode data with userId is empty
+  Scenario: Verify create typicode data with userId is zero
     Given prepare create request data with title is "recommendation"
     When prepare create request data with body is "motorcycle"
     And prepare create request data with userId is "0"
@@ -83,5 +83,26 @@ Feature: Create Data for Typicode
     Then receive create response successfully with response code is "201"
     And create response with userId is null
 
-#To do :
-# add number checking for userId (input zero, long digit, contains decimal, alfanumerik ?
+  Scenario: Verify create typicode data with userId with long digit
+    Given prepare create request data with title is "recommendation"
+    When prepare create request data with body is "motorcycle"
+    And prepare create request data with userId is "1000000000000000000000"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
+    And prepare create request data with userId is "1e+21"
+
+  Scenario: Verify create typicode data with userId in decimal
+    Given prepare create request data with title is "recommendation"
+    When prepare create request data with body is "motorcycle"
+    And prepare create request data with userId is "1.0"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
+    And prepare create request data with userId is "1"
+
+  Scenario: Verify create typicode data with userId minus
+    Given prepare create request data with title is "recommendation"
+    When prepare create request data with body is "motorcycle"
+    And prepare create request data with userId is "-1"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
+    And prepare create request data with userId is "-1"
