@@ -14,7 +14,7 @@ Feature: Create Data for Typicode
     And create response with id is not NULL
 
   #-------------------------- Negative Testcase --------------------------
-  Scenario Outline: Verify create typicode data with duplicate request
+  Scenario Outline: Verify create typicode data with duplicate request, upper case, camel case
     Given prepare create request data with title is "<title>"
     When prepare create request data with body is "<body>"
     And prepare create request data with userId is "<userId>"
@@ -28,6 +28,8 @@ Feature: Create Data for Typicode
     | title          | body       | userId | responseCode |
     | recommendation | motorcycle | 12     | 201          |
     | recommendation | motorcycle | 12     | 201          |
+    | RECOMMENDATION | MOTORCYCLE | 12     | 201          |
+    | RECOMMENdation | motorCYCLE | 12     | 201          |
 
   Scenario: Verify create typicode data with id is exist
     Given prepare create request data with title is "recommendation"
@@ -45,6 +47,36 @@ Feature: Create Data for Typicode
     Then receive create response successfully with response code is "201"
     And create response with title should be ""
 
+  Scenario: Verify create typicode data with title contains chars, number, and space
+    Given prepare create request data with title is "rec0mmendat1on? "
+    When prepare create request data with body is "motorcycle"
+    And prepare create request data with userId is "12"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
+
+  Scenario: Verify create typicode data with title contains only space
+    Given prepare create request data with title is " "
+    When prepare create request data with body is "motorcycle"
+    And prepare create request data with userId is "12"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
+    And create response with title should be " "
+
+  Scenario: Verify create typicode data with title is under minimum required
+    Given prepare create request data with title is "r"
+    When prepare create request data with body is "motorcycle"
+    And prepare create request data with userId is "12"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
+    And create response with title should be "r"
+
+  Scenario: Verify create typicode data with title is more than max required
+    Given prepare create request data with title is "recommendationrecommendationrecommendationrecommendationrecommendationrecommendationrecommendationrecommendationrecommendationrecommendationrecommendationrecommendationrecommendationrecommendation"
+    When prepare create request data with body is "motorcycle"
+    And prepare create request data with userId is "12"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
+
   Scenario: Verify create typicode data with body is empty
     Given prepare create request data with title is "recommendation"
     When prepare create request data with body is ""
@@ -52,6 +84,35 @@ Feature: Create Data for Typicode
     And send post to typicode endpoint
     Then receive create response successfully with response code is "201"
     And create response with body should be ""
+
+  Scenario: Verify create typicode data with body contains chars, number, and space
+    Given prepare create request data with title is "recommendation"
+    When prepare create request data with body is "m0torCycl3_ "
+    And prepare create request data with userId is "12"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
+    And create response with body should be ""
+
+  Scenario: Verify create typicode data with body contains only space
+    Given prepare create request data with title is "recommendation"
+    When prepare create request data with body is " "
+    And prepare create request data with userId is "12"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
+
+  Scenario: Verify create typicode data with body is under minimum required
+    Given prepare create request data with title is "recommendation"
+    When prepare create request data with body is "m"
+    And prepare create request data with userId is "12"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
+
+  Scenario: Verify create typicode data with body is more than max required
+    Given prepare create request data with title is "recommendation"
+    When prepare create request data with body is "motorcyclemotorcyclemotorcyclemotorcyclemotorcyclevmotorcyclemotorcyclemotorcyclemotorcyclemotorcyclemotorcyclemotorcyclemotorcyclemotorcycle"
+    And prepare create request data with userId is "12"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "201"
 
   Scenario: Verify create typicode data with userId is zero
     Given prepare create request data with title is "recommendation"
@@ -90,6 +151,20 @@ Feature: Create Data for Typicode
     And send post to typicode endpoint
     Then receive create response successfully with response code is "201"
     And prepare create request data with userId is "1e+21"
+
+  Scenario: Verify create typicode data with userId with alphanumerik
+    Given prepare create request data with title is "recommendation"
+    When prepare create request data with body is "motorcycle"
+    And prepare create request data with userId is "1abc"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "500"
+
+  Scenario: Verify create typicode data with userId with contains char and space
+    Given prepare create request data with title is "recommendation"
+    When prepare create request data with body is "motorcycle"
+    And prepare create request data with userId is "1@ ?"
+    And send post to typicode endpoint
+    Then receive create response successfully with response code is "500"
 
   Scenario: Verify create typicode data with userId in decimal
     Given prepare create request data with title is "recommendation"
